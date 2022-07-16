@@ -1,5 +1,5 @@
 
-
+import numpy as np
 
 
 class Deterministic: 
@@ -8,6 +8,15 @@ class Deterministic:
 	"""
 
 	def __init__(self, value): 
+		"""
+		Generates the basic object. 
+
+		Arguments
+		------------
+		value: float
+			The value of the random variable. 
+		
+		"""
 
 		self.value = value
 
@@ -114,14 +123,8 @@ class Deterministic:
 		list[floats]
 		
 		"""
-		return [self.value for _ in range(k)]
+		return np.repeat(self.value, k)
 
-
-
-d = Deterministic(1)
-
-
-print(d.get_samples(10))
 
 
 
