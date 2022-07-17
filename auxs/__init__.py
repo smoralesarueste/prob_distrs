@@ -1,3 +1,3 @@
 
 
-from BinaryTree import BinaryTree
+from .BinaryTree import BinaryTree
