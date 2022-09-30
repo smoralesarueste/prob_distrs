@@ -1,5 +1,8 @@
 
 import numpy as np
+
+from math import log
+
 from Deterministic import Deterministic
 from auxs import BinaryTree
 
@@ -132,7 +135,16 @@ class FiniteDiscrete:
 		float
 		
 		"""
-		return self.value
+
+		vals = [*self.probs]
+		vals.sort()
+		cum_prob = 0.0
+
+		for val in vals:
+			if cum_prob >= .5: break
+			cum_prob += self.probs[val]
+
+		return val
 
 	def get_mode(self):
 		"""
@@ -143,7 +155,7 @@ class FiniteDiscrete:
 		float
 		
 		"""
-		return self.value
+		return max(self.probs, key = self.probs.get)
 
 	def get_moment(self, n, c = 0): 
 		"""
@@ -161,7 +173,8 @@ class FiniteDiscrete:
 		float
 		
 		"""
-		return (self.value - c)**n
+
+		return sum([self.probs[val] * (val - c)**n for val in [*self.probs]]) / sum([self.probs[val] for val in [*self.probs]])
 
 	def get_entropy(self):
 		"""
@@ -172,7 +185,7 @@ class FiniteDiscrete:
 		float
 		
 		"""
-		return 0
+		return - sum([self.probs[val] * log(self.probs[val]) for val in [*self.probs]]) / sum([self.probs[val] for val in [*self.probs]])
 
 	def get_samples(self, k = 1):
 		"""
@@ -188,7 +201,7 @@ class FiniteDiscrete:
 		list[floats]
 		
 		"""
-		return np.repeat(self.value, k)
+		return self.get_samples(k)
 
 
 
