@@ -33,9 +33,32 @@ class BinaryTree:
 			self.root.add_value(value = val, weight = wei)
 
 	def describe(self):
-		self.root.describe()
+		"""
+		Prints all the nodes that are part of the tree, in order of apparience. 
 
-	def get_samples(self, n): 
+		Arguments
+		------------
+		depth: int >= 0
+			Keeps track of how many levels down this node is with respect to the root
+
+		"""
+		self.root.describe(depth = 0)
+
+	def get_samples(self, n = 1): 
+		"""
+		Get n samples from the tree using the relative weights as probabilities. 
+
+		Arguments
+		------------
+		n: int >= 1
+			Number of samples to get. Default value of 0. 
+		
+		Returns
+		------------
+		list
+			Containing the n values sampled
+
+		"""
 		return self.root.get_samples(n)
 
 		

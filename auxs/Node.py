@@ -122,7 +122,7 @@ class Node:
 
 	def get_samples(self, n = 1): 
 		"""
-		Get n samples the node using the relative weights as probabilities
+		Get n samples from the node using the relative weights as probabilities
 
 		Arguments
 		------------
