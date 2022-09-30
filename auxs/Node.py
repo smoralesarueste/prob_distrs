@@ -128,11 +128,6 @@ class Node:
 		------------
 		n: int >= 1
 			Number of samples to get
-
-		Arguments
-		------------
-		value: float
-			The value of the node
 		
 		Returns
 		------------

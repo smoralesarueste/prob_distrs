@@ -1,17 +1,26 @@
 
 
+
+
+
+
+
+
 import random, time
 from FiniteDiscrete import FiniteDiscrete as fd
 
+from collections import Counter
+from pprint import pprint
+
+N = 1_000
 
 
-N = 1_000_000
+# vals = [i for i in range(N)]
+vals = [1,2,3,4]
+# weigs = [(10 * random.random())**3 for i in range(N)]
+weigs = [10, 50, 25, 15]
 
-
-vals = [i for i in range(N)]
-weigs = [(10 * random.random())**2 for i in range(N)]
-
-dist = fd({vals[i]: weigs[i] for i in range(N)})
+dist = fd({vals[i]: weigs[i] for i in range(4)})# N)})
 
 
 n_samples = 100_000_000
@@ -35,9 +44,12 @@ def get_samples(n):
 def get_samples_original(n):
 	return random.choices(population = vals, weights = weigs, k = n)
 
-get_samples(n = n_samples)
-get_samples_original(n = n_samples)
+pprint(Counter(get_samples(n = n_samples)))
+# get_samples_original(n = n_samples)
 
 # dist.get_samples(n_samples)
+
+
+
 
 
