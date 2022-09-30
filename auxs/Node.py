@@ -93,20 +93,32 @@ class Node:
 
 		# Node is intermediate
 		else:
-			new_node = Node(value = None, weight = weight + self.weight)
+
+			# The new node is greater than the examined node
 			if weight > self.weight: 
+				new_node = Node(value = None, weight = weight + self.weight)
 				new_node.left = Node(value = value, weight = weight)
 				new_node.right = self.get_copy()
+				self.redefined_as(new_node)
+
+			# The new node is greater than the left child, but not the examined node
 			elif weight > self.left.weight: 
+				new_node = Node(value = None, weight = weight + self.weight)
 				new_node.left = self.get_copy()
 				new_node.right = Node(value = value, weight = weight)
+				self.redefined_as(new_node)
+
+			# The new node plus the right child is greater than the left child
 			elif weight + self.right.weight > self.left.weight: 
-				self.right.add_value(value, weight)
+				new_node = Node(value = None, weight = weight + self.weight)
 				new_node.left = self.right
 				new_node.right = self.left
+				new_node.left.add_value(value, weight)
+				self.redefined_as(new_node)
 			else: 
+				self.weight += weight
 				self.right.add_value(value, weight)
-			self.redefined_as(new_node)
+			
 
 	def get_samples(self, n = 1): 
 		"""
