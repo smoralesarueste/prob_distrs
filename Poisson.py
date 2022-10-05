@@ -1,7 +1,7 @@
 
 import numpy as np
 
-from math import log
+from math import log, exp, factorial, ceil
 
 from auxs import InfiniteSet
 
@@ -28,49 +28,53 @@ class Poisson:
 		# Check lambda is greater than 0
 		assert _lambda > 0, "Lambda parameter can not be negative for a Poisson distribution"
 
+		# Assign lambda param
+		self._lambda = _lambda
+
 		# Creates support set as the set of all natural numbers
 		self.support = InfiniteSet(base_set = "N")
 
+		# Creates the prob function 
+		self.probs = self.get_prob_function()
 
-	def get_support_probs(self, values, weights):
+
+	def get_prob_function(self):
 		"""
-		Creates self.support, and the self.probs dictionary. 
-
-		Arguments
-		------------
-		values: list
-			List of possible values in the support
-		weights: list
-			The relative weight of each element. Dont have to be normalized. 
+		Creates self.probs function to evaluate the probability of a value. 
+		Use memoization and the recurrence formula P(k+1) = P(k) * lambda / (k+1)
 
 		Returns
 		------------
-		tuple(set, dict)
-			The self.support and self.probs attributes
+		function:value->float
+			The self.probs value for the PDF of a Poisson distribution
 		
 		"""
-		supp = set(values)
 
-		total_weight = weights.sum()
-		probs = {v: w / total_weight for (v,w) in zip(values, weights)}
+		def memoized_PDF(): 
 
-		return supp, probs
+			# Cache for known values
+			cache = dict()
 
-	def get_tree_repr(self, values, weights): 
-		"""
-		Creates the balanced binary tree used to get faster samples from the distribution. 
+			# Base step: P(0) is easy to compute
+			cache[0] = exp(-self._lambda)
 
-		Arguments
-		------------
-		None
 
-		Returns
-		------------
-		Node:
-			The root of the tree. 
-		
-		"""
-		return BinaryTree(list(values), list(weights))
+			def PDF(value):
+				# If value not in support, prob is 0
+				if value not in self.support: return 0.0
+				
+				# If prob has been memoized, no need for calculation
+				# Otherwise, we advance using the recursion formula, memoizing the steps
+				if value > len(cache)-1: 
+					i = len(cache)-1
+					while i < value: 
+						cache[i+1] = cache[i] * self._lambda / (i+1)
+						i += 1
+				return cache[value]
+
+			return PDF
+
+		return memoized_PDF()
 
 	def get_mean(self):
 		"""
@@ -81,7 +85,7 @@ class Poisson:
 		float
 		
 		"""
-		return sum([self.probs[val] * val for val in [*self.probs]]) / sum([self.probs[val] for val in [*self.probs]])
+		return self._lambda
 
 	def get_std(self):
 		"""
@@ -104,8 +108,7 @@ class Poisson:
 		
 		"""
 
-		mean = self.get_mean()
-		return sum([self.probs[val] * (val - mean)**2 for val in [*self.probs]]) / sum([self.probs[val] for val in [*self.probs]])
+		return self._lambda
 
 	def get_median(self):
 		"""
@@ -117,15 +120,7 @@ class Poisson:
 		
 		"""
 
-		vals = [*self.probs]
-		vals.sort()
-		cum_prob = 0.0
-
-		for val in vals:
-			if cum_prob >= .5: break
-			cum_prob += self.probs[val]
-
-		return val
+		return ceil(self._lambda - log(2))
 
 	def get_mode(self):
 		"""
