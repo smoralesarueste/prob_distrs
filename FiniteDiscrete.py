@@ -184,7 +184,8 @@ class FiniteDiscrete:
 		float
 		
 		"""
-		return - sum([self.probs[val] * log(self.probs[val]) for val in [*self.probs]]) / sum([self.probs[val] for val in [*self.probs]])
+		sum_weigs = sum([self.probs[val] for val in [*self.probs]])
+		return - sum([self.probs[val] * log(self.probs[val] / sum_weigs) for val in [*self.probs]]) / sum_weigs
 
 	def get_samples(self, k = 1):
 		"""

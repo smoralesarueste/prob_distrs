@@ -22,14 +22,33 @@ class Poisson:
 		"""
 
 		# Check if lambda is a float
-		if not isinstance(_lambda, float): 
+		if not (isinstance(_lambda, int) or isinstance(_lambda, float)): 
 			raise TypeError("FiniteDiscrete values argument should be a list or a dict")
 
 		# Check lambda is greater than 0
 		assert _lambda > 0, "Lambda parameter can not be negative for a Poisson distribution"
 
-		# Creates support set and probability dictionary
-		self.support, self.probs = self.get_support_probs(vals, weigs)
+		# Creates support validator function
+		self.is_supported = self.get_support_validator()
+
+		# , self.probs = self.get_support_probs(vals, weigs)
+
+	def get_support_validator(self):
+		"""
+		Creates self.support as the function to validate whether an input is part of the support or not. 
+
+		Returns
+		------------
+		function(n)
+			Returns true if n is a part of the support of the distribution. 
+		
+		"""
+		def is_valid(n):
+			if isinstance(n, int): return True
+			if isinstance(n, float): return (n-int(n)) == 0.0
+			return False
+
+		return is_valid
 
 	def get_support_probs(self, values, weights):
 		"""
