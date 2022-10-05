@@ -3,7 +3,7 @@ import numpy as np
 
 from math import log
 
-from auxs import BinaryTree
+from auxs import InfiniteSet
 
 class Poisson: 
 	"""
@@ -28,27 +28,9 @@ class Poisson:
 		# Check lambda is greater than 0
 		assert _lambda > 0, "Lambda parameter can not be negative for a Poisson distribution"
 
-		# Creates support validator function
-		self.is_supported = self.get_support_validator()
+		# Creates support set as the set of all natural numbers
+		self.support = InfiniteSet(base_set = "N")
 
-		# , self.probs = self.get_support_probs(vals, weigs)
-
-	def get_support_validator(self):
-		"""
-		Creates self.support as the function to validate whether an input is part of the support or not. 
-
-		Returns
-		------------
-		function(n)
-			Returns true if n is a part of the support of the distribution. 
-		
-		"""
-		def is_valid(n):
-			if isinstance(n, int): return True
-			if isinstance(n, float): return (n-int(n)) == 0.0
-			return False
-
-		return is_valid
 
 	def get_support_probs(self, values, weights):
 		"""
