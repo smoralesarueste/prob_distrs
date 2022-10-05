@@ -62,7 +62,7 @@ class Poisson:
 			def PDF(value):
 				# If value not in support, prob is 0
 				if value not in self.support: return 0.0
-				
+
 				# If prob has been memoized, no need for calculation
 				# Otherwise, we advance using the recursion formula, memoizing the steps
 				if value > len(cache)-1: 
@@ -131,7 +131,7 @@ class Poisson:
 		float
 		
 		"""
-		return max(self.probs, key = self.probs.get)
+		return ceil(self._lambda) - 1
 
 	def get_moment(self, n, c = 0): 
 		"""
