@@ -136,11 +136,13 @@ class Poisson:
 	def get_moment(self, n, c = 0): 
 		"""
 		Computes the n-th moment of the distr, centered on c. 
+		For lack of mathematical knowledge, only n = 0,1,2 are allowed
 
 		Arguments
 		------------
 		n: int
 			The moment to calculate. Has to be a positive integer. 
+			Only n = 0,1,2 are allowed for now
 		c: float
 			The center of the calculation. Default value of 0. 
 
@@ -150,18 +152,29 @@ class Poisson:
 		
 		"""
 
-		return sum([self.probs[val] * (val - c)**n for val in [*self.probs]]) / sum([self.probs[val] for val in [*self.probs]])
+		# Check if n = 0,1,2
+		assert n in (0,1,2), f"Error computing the {n}-th moment: Parameter n has to be 0, 1 or 2. "
+
+		# Returning based on per case resolution
+		if n == 0: 
+			return 1
+		elif n == 1: 
+			return self.get_mean() - c
+		else:
+			(self.get_mean - c)**2 + self.get_var()
+		return
 
 	def get_entropy(self):
 		"""
 		Computes the entropy of the distr. 
+		Returns None, as no closed form is known. 
 
 		Returns
 		------------
 		float
 		
 		"""
-		return - sum([self.probs[val] * log(self.probs[val]) for val in [*self.probs]]) / sum([self.probs[val] for val in [*self.probs]])
+		return None
 
 	def get_samples(self, k = 1):
 		"""
