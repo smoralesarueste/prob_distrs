@@ -23,7 +23,7 @@ class Poisson:
 
 		# Check if lambda is a float
 		if not (isinstance(_lambda, int) or isinstance(_lambda, float)): 
-			raise TypeError("FiniteDiscrete values argument should be a list or a dict")
+			raise TypeError("Lambda parameter has to be float or int")
 
 		# Check lambda is greater than 0
 		assert _lambda > 0, "Lambda parameter can not be negative for a Poisson distribution"
@@ -190,7 +190,7 @@ class Poisson:
 		list[floats]
 		
 		"""
-		return self.get_samples(k)
+		return None
 
 
 
